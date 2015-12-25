@@ -35,14 +35,38 @@ A `Node` represents a continuous area of free space, and has the following prope
 | left               | `*Node`    | The root `Node` of a tree containing all `Node`s where `to` < this `Node`'s `from` |
 | right              | `*Node`    | The root `Node` of a tree containing all `Node`s where `from` > this `Node`'s `to` |
 
+The rules for nodes within a tree are as follows:
+
+* If the tree has no allocations, a single `Node` exists at the root, spanning the available capacity of the tree.
+* All nodes to the left of any node must represent space 'lower' than the bounds of that node.
+* All nodes to the right of any node must represent space 'higher' than the bounds of that node.
+* A node may not overlap, engulf, or be engulfed by any other node, a merge should occur instead.
+* No node may be exactly adjacent to any other node (two nodes with no allocation between them) - a merge should occur instead.
+
 ### FreeSpaceTree
+
+The `FreeSpaceTree` type is a container for the tree, with the following properties:
+
+| Property           | Type       | Description                                      |
+|:-------------------|:-----------|:-------------------------------------------------|
+| capacity           | `uint64`   | The largest blockid that the device can address  |
+| free               | `uint64`   | The total free blocks in the tree                |
+| root               | `*Node`    | The root `Node` of the tree                      |
 
 ## Operations
 
 ### Allocation
 
+Allocation is the process where *n* continuous free blocks are requested from the tree, which attempts to find a suitable area of free space and allocate it. The response is one of the following:
+
+* Returns the blockid of the first block in the area, having allocated the free space.
+* No continuous area of free space is available of the size requested.
+
 ### Deallocation
+
+Allocation is the process where *n* continuous free blocks are freed from the tree, which marks those blocks as free and returns accordingly.
+As allocations are 'valueless', i.e. there is no specific information associated with the allocation other than that area of blocks is now unavailable, the tree will merge adjacent blocks of free space created during deallocation in order to maintain storage and operational efficiency.
 
 ## Further Reading
 
-[1]: (https://en.wikipedia.org/wiki/Free_space_bitmap#Advanced_techniques)
+[1]: (https://en.wikipedia.org/wiki/Free_space_bitmap)
