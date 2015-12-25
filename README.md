@@ -16,7 +16,9 @@ freespacetree is an abstract data type designed to provide the following:
 
 A storage device is assumed to be a continious range of values of type **int64** (blocks, bytes, runes, etc), with a defined start and end value. Areas of the device can be allocated, removing them from the free space pool, and previously allocated areas can be fully or partially deallocated, that is, returned to the free space pool. This is a common problem in filesystems, databases and the like, where modern disk sizes in the Gb and Tb range now mean that approaches such as a [Free Space Bitmap][1] are largely unworkable.  
 
-As such, freespacetree attempts to solve the problem by storing representations of continuous areas of free space in a binary tree structure.
+As such, freespacetree attempts to solve the problem by storing representations of continuous areas of free space in a binary tree structure. 
+
+**NOTE**: The nodes represent free space, not allocated space. As such, the node coverage is a 'negative' of usage.
 
 ## Structure
 

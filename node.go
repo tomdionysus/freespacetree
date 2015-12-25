@@ -1,7 +1,7 @@
 package freespacetree
 
 import(
-  "errors"
+  // "fmt"
 )
 
 type Node struct {
@@ -11,51 +11,69 @@ type Node struct {
   right *Node
 }
 
-func NewNode() *Node {
-  inst := &Node{}
+func NewNode(from, to uint64) *Node {
+  inst := &Node{
+    left: nil,
+    right: nil,
+    from: from,
+    to: to,
+  }
   return inst
 }
 
+func (me *Node) Allocate(blocks uint64, limit uint64) (uint64, bool) {
+  if me.to-me.from >= blocks {
+    // Will fit in this node.
+    blockid := me.from
+    me.from += blocks
+    return blockid, true
+  }
+
+  if me.right !=nil {
+    blockid, found := me.right.Allocate(blocks, limit)
+    if found { return blockid, found }
+  } else {
+    // Rightmost in tree.
+    if limit - me.to > blocks {
+      // Will fit between this node and limit.
+      me.right = NewNode(me.to+1, blocks)
+      return 0, true
+    } else { return 0, false }
+  }
+
+  if me.left !=nil { 
+    blockid, found := me.left.Allocate(blocks, limit)
+    if found { return blockid, found }
+  } else {
+    // Leftmost in tree.
+    if me.from > blocks {
+      // Will fit between 0 and this node.
+      me.left = NewNode(0, blocks)
+      return 0, true
+    } else { return 0, false }
+  }
+
+  return 0, false
+}
+
+func (me *Node) Deallocate(blockid uint64, blocklength uint64) *Node {
+  node := NewNode(blockid, blockid+blocklength)
+  me.AddNode(node)
+  return me
+}
+
 // Add an existing node into the tree, merging if necessary, error if node overlaps
-func (me *Node) AddNode(node *Node) (*Node, error) {
-  // Detect node merge
-  if me.left == nil && node.from<me.from && node.to == me.from-1 {
-    // Node is right before us
-    me.from = node.from
-    return me, nil
-  }
-  if me.right == nil && node.from>me.to && node.from == me.to+1 {
-    // Node is right after us
-    me.to = node.to
-    return me, nil
-  }
-  if me.left == nil && me.right == nil && node.from<me.from && node.to>me.to {
-    // Node engulfs us
-    me.from = node.from
-    me.to = node.to
-    return me, nil
-  }
-  // Node doesn't touch us, add to tree
-  if node.from < me.from && node.to < me.from {
-    // Node is before us
-    if me.left == nil { 
+func (me *Node) AddNode(node *Node) *Node {
+  if node.to < me.from {
+    if me.left == nil {
       me.left = node
-      return node, nil
-    } else { 
-      return me.left.AddNode(node)
-    }
-  }
-  if node.from > me.to && node.to > me.to {
-    // Node if after us
-    if me.right == nil { 
+    } else { me.left = me.left.AddNode(node) }
+  } else {
+    if me.right == nil {
       me.right = node
-      return node, nil
-    } else { 
-      return me.right.AddNode(node)
-    }
-  } 
-  // Node overlaps us
-  return nil, errors.New("Node overlaps")
+    } else { me.left = me.right.AddNode(node) }
+  }
+  return me
 }
 
 func (me *Node) RemoveNode(node *Node) error {
