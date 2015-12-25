@@ -1,4 +1,4 @@
-package rangetree
+package freespacetree
 
 import(
   "errors"
@@ -22,18 +22,18 @@ func (me *Node) AddNode(node *Node) (*Node, error) {
   if me.left == nil && node.from<me.from && node.to == me.from-1 {
     // Node is right before us
     me.from = node.from
-    return me
+    return me, nil
   }
   if me.right == nil && node.from>me.to && node.from == me.to+1 {
     // Node is right after us
     me.to = node.to
-    return me
+    return me, nil
   }
   if me.left == nil && me.right == nil && node.from<me.from && node.to>me.to {
     // Node engulfs us
     me.from = node.from
     me.to = node.to
-    return me
+    return me, nil
   }
   // Node doesn't touch us, add to tree
   if node.from < me.from && node.to < me.from {
@@ -42,22 +42,22 @@ func (me *Node) AddNode(node *Node) (*Node, error) {
       me.left = node
       return node, nil
     } else { 
-      me.left.AddNode(node)
-      return
+      return me.left.AddNode(node)
     }
   }
   if node.from > me.to && node.to > me.to {
     // Node if after us
     if me.right == nil { 
       me.right = node
+      return node, nil
     } else { 
-      me.right.AddNode(node)
+      return me.right.AddNode(node)
     }
   } 
   // Node overlaps us
-  return errors.New("Node overlaps")
+  return nil, errors.New("Node overlaps")
 }
 
 func (me *Node) RemoveNode(node *Node) error {
-
+  return nil
 }
