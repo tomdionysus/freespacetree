@@ -14,7 +14,7 @@ func New(capacity uint64) *Tree {
 }
 
 func (me *Tree) Allocate(blocks uint64) (uint64, bool) {
-  return me.root.Allocate(blocks, me.capacity)
+  return me.root.Allocate(blocks)
 }
 
 func (me *Tree) Deallocate(blockid uint64, blocklength uint64) {
