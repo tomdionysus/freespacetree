@@ -47,6 +47,9 @@ func (me *Node) Deallocate(blockid uint64, blocklength uint64) *Node {
 func (me *Node) AddNode(node *Node) *Node {
   // Detect node engulfed by me
   if me.from <= node.from && me.to >= node.to {
+    // Add node's children if any
+    if node.left != nil { me.AddNode(node.left) }
+    if node.right != nil { me.AddNode(node.right) }
     return me // drop node
   }
   // Detect me engulfed by node

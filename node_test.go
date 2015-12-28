@@ -86,7 +86,7 @@ func TestAddNodeRightAdjacentMerge(t *testing.T) {
   
   node := NewNode(51,60)
   node.AddNode(NewNode(80,90))
-  node.AddNode(NewNode(45,55))
+  node.AddNode(NewNode(45,46))
 
   root = root.AddNode(node)
   assert.Equal(t, root.from, uint64(40))
