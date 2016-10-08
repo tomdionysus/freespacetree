@@ -30,7 +30,7 @@ func TestTreeAllocate(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, uint64(20), bid)
 
-	bid, ok = x.Allocate(19)
+	_, ok = x.Allocate(19)
 	assert.False(t, ok)
 }
 
@@ -51,6 +51,6 @@ func TestTreeDeallocate(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, uint64(30), bid)
 
-	bid, ok = x.Allocate(19)
+	_, ok = x.Allocate(19)
 	assert.False(t, ok)
 }
