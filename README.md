@@ -1,7 +1,5 @@
 # freespacetree
 
-**CAVEAT**: freespacetree is currently in early alpha. Please do not use freespacetree at this time.
-
 [![Build Status](https://travis-ci.org/tomdionysus/freespacetree.svg)](https://travis-ci.org/tomdionysus/freespacetree)
 [![Coverage Status](https://coveralls.io/repos/tomdionysus/freespacetree/badge.svg?branch=master&service=github)](https://coveralls.io/github/tomdionysus/freespacetree?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/tomdionysus/freespacetree)](https://goreportcard.com/report/github.com/tomdionysus/freespacetree)
