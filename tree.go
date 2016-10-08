@@ -1,3 +1,6 @@
+// Package freespacetree provides types designed to efficiently store a representation of free space on a storage device.
+//
+// Please see the repository at https://github.com/tomdionysus/freespacetree
 package freespacetree
 
 // Tree represents a tree of free space.

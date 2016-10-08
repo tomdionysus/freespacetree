@@ -21,7 +21,7 @@ As such, freespacetree attempts to solve the problem by storing representations 
 
 ## Structure
 
-The functionality of `freespacetree` in contained within two types, `Node` and `FreeSpaceTree`.
+The functionality of `freespacetree` in contained within two types, `Node` and `Tree`.
 
 For clarity, it is assumed that the device contains blocks, each atomic unit of free space is assumed to have a unique address/offset/identifier of type `uint64` which will be referred to as the **blockid**. There is no reason, however, that freespacetree couldn't be used for memory allocation (blockid = memory address) or for space partition (blockid = physical measurement), etc.
 
@@ -44,9 +44,9 @@ The rules for nodes within a tree are as follows:
 * A node may not overlap, engulf, or be engulfed by any other node, a merge should occur instead.
 * No node may be exactly adjacent to any other node (two nodes with no allocation between them) - a merge should occur instead.
 
-### FreeSpaceTree
+### Tree
 
-The `FreeSpaceTree` type is a container for the tree, with the following properties:
+The `Tree` type is a container for the tree, with the following properties:
 
 | Property           | Type       | Description                                      |
 |:-------------------|:-----------|:-------------------------------------------------|
