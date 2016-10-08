@@ -1,5 +1,6 @@
 package freespacetree
 
+// Node represents a range of free space in the tree.
 type Node struct {
 	from  uint64
 	to    uint64
@@ -7,6 +8,7 @@ type Node struct {
 	right *Node
 }
 
+// NewNode returns a pointer to a new Node with the specified range of free space.
 func NewNode(from, to uint64) *Node {
 	inst := &Node{
 		left:  nil,
@@ -17,6 +19,8 @@ func NewNode(from, to uint64) *Node {
 	return inst
 }
 
+// Allocate attempts to allocate a continuous range of blocks as specified, returning
+// the first blockid in the allocation, and whether the space was successfully allocated.
 func (nd *Node) Allocate(blocks uint64) (uint64, bool) {
 	if nd.left != nil {
 		blockid, found := nd.left.Allocate(blocks)
@@ -40,14 +44,15 @@ func (nd *Node) Allocate(blocks uint64) (uint64, bool) {
 	return 0, false
 }
 
+// Deallocate frees the continuous space referenced by the specified blockid and length, returning the new node
+// representing the free space.
 func (nd *Node) Deallocate(blockid uint64, blocklength uint64) *Node {
 	node := NewNode(blockid, blockid+blocklength)
-	nd.AddNode(node)
+	nd = nd.AddNode(node)
 	return nd
 }
 
-// Add an existing node into the tree, merging if necessary
-// Returns the new root of the tree
+// AddNode adds an existing node into the tree, merging nodes if necessary and returning the new root of the tree.
 func (nd *Node) AddNode(node *Node) *Node {
 	// Detect node engulfed by nd
 	if nd.from <= node.from && nd.to >= node.to {
