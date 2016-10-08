@@ -76,6 +76,4 @@ freespacetree is licensed under the Open Source MIT license. Please see the [Lic
 
 The freespacetree project supports and enforces [The Contributor Covenant](http://contributor-covenant.org/). Please read [the code of conduct](CODE_OF_CONDUCT.md) before contributing.
 
-## Further Reading
-
 [1]: (https://en.wikipedia.org/wiki/Free_space_bitmap)
