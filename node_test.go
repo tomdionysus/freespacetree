@@ -110,8 +110,10 @@ func TestAddNodeEngulfsChildren(t *testing.T) {
 	root := NewNode(0, 20)
 
 	node := NewNode(10, 15)
-	node.AddNode(NewNode(5, 2))
-	node.AddNode(NewNode(18, 2))
+	node = node.AddNode(NewNode(5, 7))
+	node = node.AddNode(NewNode(18, 20))
+
+	assert.NotNil(t, node.right)
 
 	root = root.AddNode(node)
 	assert.Equal(t, root.from, uint64(0))
