@@ -17,21 +17,21 @@ func NewNode(from, to uint64) *Node {
 	return inst
 }
 
-func (me *Node) Allocate(blocks uint64) (uint64, bool) {
-	if me.left != nil {
-		blockid, found := me.left.Allocate(blocks)
+func (nd *Node) Allocate(blocks uint64) (uint64, bool) {
+	if nd.left != nil {
+		blockid, found := nd.left.Allocate(blocks)
 		if found {
 			return blockid, found
 		}
 	}
-	if me.to-me.from >= blocks {
+	if nd.to-nd.from >= blocks {
 		// Will fit in this node.
-		blockid := me.from
-		me.from += blocks
+		blockid := nd.from
+		nd.from += blocks
 		return blockid, true
 	}
-	if me.right != nil {
-		blockid, found := me.right.Allocate(blocks)
+	if nd.right != nil {
+		blockid, found := nd.right.Allocate(blocks)
 		if found {
 			return blockid, found
 		}
@@ -40,105 +40,105 @@ func (me *Node) Allocate(blocks uint64) (uint64, bool) {
 	return 0, false
 }
 
-func (me *Node) Deallocate(blockid uint64, blocklength uint64) *Node {
+func (nd *Node) Deallocate(blockid uint64, blocklength uint64) *Node {
 	node := NewNode(blockid, blockid+blocklength)
-	me.AddNode(node)
-	return me
+	nd.AddNode(node)
+	return nd
 }
 
 // Add an existing node into the tree, merging if necessary
 // Returns the new root of the tree
-func (me *Node) AddNode(node *Node) *Node {
-	// Detect node engulfed by me
-	if me.from <= node.from && me.to >= node.to {
+func (nd *Node) AddNode(node *Node) *Node {
+	// Detect node engulfed by nd
+	if nd.from <= node.from && nd.to >= node.to {
 		// Add node's children if any
 		if node.left != nil {
-			me.AddNode(node.left)
+			nd.AddNode(node.left)
 		}
 		if node.right != nil {
-			me.AddNode(node.right)
+			nd.AddNode(node.right)
 		}
-		return me // drop node
+		return nd // drop node
 	}
-	// Detect me engulfed by node
-	if node.from <= me.from && node.to >= me.to {
+	// Detect nd engulfed by node
+	if node.from <= nd.from && node.to >= nd.to {
 		// add our children to new node
-		if me.left != nil {
-			node.AddNode(me.left)
+		if nd.left != nil {
+			node.AddNode(nd.left)
 		}
-		if me.right != nil {
-			node.AddNode(me.right)
+		if nd.right != nil {
+			node.AddNode(nd.right)
 		}
-		// drop me, return new node
-		me.left = nil
-		me.right = nil
+		// drop nd, return new node
+		nd.left = nil
+		nd.right = nil
 		return node
 	}
 	// Detect adjacent to left / overlaps left
-	if node.to == me.from-1 || (node.from <= me.from && node.to <= me.to && node.to >= me.from) {
-		me.from = node.from // extend me and drop new node
+	if node.to == nd.from-1 || (node.from <= nd.from && node.to <= nd.to && node.to >= nd.from) {
+		nd.from = node.from // extend nd and drop new node
 		// Add node's children if any
 		if node.left != nil {
-			me.AddNode(node.left)
+			nd.AddNode(node.left)
 		}
 		if node.right != nil {
-			me.AddNode(node.right)
+			nd.AddNode(node.right)
 		}
 		// Clear and re-add children
-		left := me.left
-		right := me.right
-		me.left = nil
-		me.right = nil
+		left := nd.left
+		right := nd.right
+		nd.left = nil
+		nd.right = nil
 		if left != nil {
-			me.AddNode(left)
+			nd.AddNode(left)
 		}
 		if right != nil {
-			me.AddNode(right)
+			nd.AddNode(right)
 		}
 		// drop node
 		node.left = nil
 		node.right = nil
-		return me
+		return nd
 	}
 	// Detect adjacent to right / overlaps right
-	if node.from == me.to+1 || (node.from >= me.from && node.from <= me.to && node.to <= me.from) {
-		me.to = node.to // extend me
+	if node.from == nd.to+1 || (node.from >= nd.from && node.from <= nd.to && node.to <= nd.from) {
+		nd.to = node.to // extend nd
 		// Add node's children if any
 		if node.left != nil {
-			me.AddNode(node.left)
+			nd.AddNode(node.left)
 		}
 		if node.right != nil {
-			me.AddNode(node.right)
+			nd.AddNode(node.right)
 		}
 		// Clear and re-add children
-		left := me.left
-		right := me.right
-		me.left = nil
-		me.right = nil
+		left := nd.left
+		right := nd.right
+		nd.left = nil
+		nd.right = nil
 		if left != nil {
-			me.AddNode(left)
+			nd.AddNode(left)
 		}
 		if right != nil {
-			me.AddNode(right)
+			nd.AddNode(right)
 		}
 		// drop node
 		node.left = nil
 		node.right = nil
-		return me
+		return nd
 	}
 	// else, binary insert
-	if node.to < me.from {
-		if me.left == nil {
-			me.left = node
+	if node.to < nd.from {
+		if nd.left == nil {
+			nd.left = node
 		} else {
-			me.left = me.left.AddNode(node)
+			nd.left = nd.left.AddNode(node)
 		}
 	} else {
-		if me.right == nil {
-			me.right = node
+		if nd.right == nil {
+			nd.right = node
 		} else {
-			me.right = me.right.AddNode(node)
+			nd.right = nd.right.AddNode(node)
 		}
 	}
-	return me
+	return nd
 }

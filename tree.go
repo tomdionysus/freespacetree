@@ -13,10 +13,10 @@ func New(capacity uint64) *Tree {
 	return inst
 }
 
-func (me *Tree) Allocate(blocks uint64) (uint64, bool) {
-	return me.root.Allocate(blocks)
+func (tr *Tree) Allocate(blocks uint64) (uint64, bool) {
+	return tr.root.Allocate(blocks)
 }
 
-func (me *Tree) Deallocate(blockid uint64, blocklength uint64) {
-	me.root = me.root.Deallocate(blockid, blocklength)
+func (tr *Tree) Deallocate(blockid uint64, blocklength uint64) {
+	tr.root = tr.root.Deallocate(blockid, blocklength)
 }
