@@ -70,6 +70,14 @@ Allocation is the process where *n* continuous free blocks are requested from th
 Allocation is the process where *n* continuous free blocks are freed from the tree, which marks those blocks as free and returns accordingly.
 As allocations are 'valueless', i.e. there is no specific information associated with the allocation other than that area of blocks is now unavailable, the tree will merge adjacent blocks of free space created during deallocation in order to maintain storage and operational efficiency.
 
+## License
+
+freespacetree is licensed under the Open Source MIT license. Please see the [License File](LICENSE.txt) for more details.
+
+## Code Of Conduct
+
+The freespacetree project supports and enforces [The Contributor Covenant](http://contributor-covenant.org/). Please read [the code of conduct](CODE_OF_CONDUCT.md) before contributing.
+
 ## Further Reading
 
 [1]: (https://en.wikipedia.org/wiki/Free_space_bitmap)
