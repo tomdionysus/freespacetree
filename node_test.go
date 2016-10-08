@@ -106,6 +106,20 @@ func TestAddNodeEngulfs(t *testing.T) {
 	assert.Nil(t, root.right)
 }
 
+func TestAddNodeEngulfsChildren(t *testing.T) {
+	root := NewNode(0, 20)
+
+	node := NewNode(10, 15)
+	node.AddNode(NewNode(5, 2))
+	node.AddNode(NewNode(18, 2))
+
+	root = root.AddNode(node)
+	assert.Equal(t, root.from, uint64(0))
+	assert.Equal(t, root.to, uint64(20))
+	assert.Nil(t, root.left)
+	assert.Nil(t, root.right)
+}
+
 func TestAddNodeIsEngulfedNoChildren(t *testing.T) {
 	root := NewNode(10, 15)
 	node := NewNode(0, 25)
